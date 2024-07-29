@@ -1,119 +1,96 @@
 <script setup lang="ts">
-  import * as Icons from '@vicons/material'
-  import { NIcon } from 'naive-ui'
+  import * as XIcons from '@vicons/material'
+  import { NIcon, type MenuOption } from 'naive-ui'
   import { h, ref } from 'vue'
 
-  interface NIons {
-    [x: string]: any
+  // 获取所有图标
+  const nIcons: Record<string, any> = {}
+  for (const [iconName, iconCompoent] of Object.entries(XIcons)) {
+    nIcons[iconName] = iconCompoent
   }
-  let nIons: NIons = {}
-  for (const [n, icon] of Object.entries(Icons)) {
-    nIons[n] = icon
-  }
-  function renderIcon(name: string) {
-    // 通过name拿到icons中的组件
-    return () => h(NIcon, null, { default: () => h(nIons[name]) })
+  function renderIcon(name: string, options?: any) {
+    return () => h(NIcon, options, { default: () => h(nIcons[name]) })
   }
 
-  const menuOptions = [
+  const menuOptions: Array<MenuOption> = [
     {
-      label: '且听风吟',
-      key: 'hear-the-wind-sing',
-      icon: renderIcon('AcUnitFilled'),
+      label: '首页',
+      key: 'home',
+      icon: renderIcon('HomeFilled'),
     },
     {
-      label: '1973年的弹珠玩具',
-      key: 'pinball-1973',
-      disabled: true,
-      icon: renderIcon('AccessAlarmFilled'),
-      children: [
-        {
-          label: '鼠',
-          key: 'rat',
-        },
-      ],
+      label: '用户管理',
+      key: 'user',
+      icon: renderIcon('PersonFilled'),
     },
     {
-      label: '寻羊冒险记',
-      key: 'a-wild-sheep-chase',
-      disabled: true,
-    },
-    {
-      label: '舞，舞，舞',
-      key: 'dance-dance-dance',
-      children: [
-        {
-          type: 'group',
-          label: '人物',
-          key: 'people',
-          children: [
-            {
-              label: '叙事者',
-              key: 'narrator',
-            },
-            {
-              label: '羊男',
-              key: 'sheep-man',
-            },
-          ],
-        },
-        {
-          label: '饮品',
-          key: 'beverage',
-          children: [
-            {
-              label: '威士忌',
-              key: 'whisky',
-            },
-          ],
-        },
-        {
-          label: '食物',
-          key: 'food',
-          children: [
-            {
-              label: '三明治',
-              key: 'sandwich',
-            },
-          ],
-        },
-        {
-          label: '过去增多，未来减少',
-          key: 'the-past-increases-the-future-recedes',
-        },
-      ],
+      label: '权限管理',
+      key: 'permission',
+      icon: renderIcon('LockFilled'),
     },
   ]
 
-  const collapsed = ref(false)
+  const profileOptions = [
+    {
+      label: '个人中心',
+      key: 'profile',
+    },
+    {
+      label: '退出登录',
+      key: 'logout',
+    },
+  ]
+  const settingDrawerActive = ref(false)
 </script>
 
 <template>
-  <n-layout position="absolute">
-    <n-layout has-sider position="absolute" style="top: 0px; bottom: 0px">
-      <n-layout-sider
-        bordered
-        :collapsed="collapsed"
-        show-trigger
-        collapse-mode="width"
-        :collapsed-width="64"
-        :width="240"
-        :native-scrollbar="false"
-        @collapse="collapsed = true"
-        @expand="collapsed = false">
-        <n-menu :collapsed-width="64" :collapsed-icon-size="22" :options="menuOptions" />
-      </n-layout-sider>
-      <n-layout>
-        <n-layout-header bordered style="height: 64px"> Header </n-layout-header>
-        <n-layout-content content-style="padding: 24px;">
-          <slot></slot>
-        </n-layout-content>
-        <n-layout-footer bordered position="absolute" style="height: 64px; padding: 24px">
-          Footer Footer Footer
-        </n-layout-footer>
-      </n-layout>
+  <n-layout has-sider position="absolute" style="top: 0; bottom: 0">
+    <n-layout-sider
+      bordered
+      show-trigger
+      collapse-mode="width"
+      :collapsed-width="64"
+      :width="240"
+      :native-scrollbar="false">
+      <n-menu :options="menuOptions" :collapsed-width="64" :collapsed-icon-size="22"></n-menu>
+    </n-layout-sider>
+    <n-layout>
+      <n-layout-header bordered position="absolute" style="height: 64px; top: 0px">
+        <n-flex justify="end" align="center" style="height: 100%; padding: 0 12px">
+          <n-button size="large">Oops!</n-button>
+          <n-dropdown :options="profileOptions" trigger="click">
+            <n-avatar
+              size="large"
+              src="https://07akioni.oss-cn-beijing.aliyuncs.com/07akioni.jpeg"
+              bordered
+              style="cursor: pointer" />
+          </n-dropdown>
+          <n-button text style="font-size: 32px" @click="settingDrawerActive = !settingDrawerActive">
+            <component :is="renderIcon('SettingsFilled')" />
+          </n-button>
+        </n-flex>
+      </n-layout-header>
+      <n-layout-content position="absolute" style="padding: 12px; top: 64px; bottom: 64px">
+        <div id="index-layout-content" style="width: 100%; height: 100%"></div>
+      </n-layout-content>
+      <n-layout-footer position="absolute" style="height: 64px; padding: 12px; bottom: 0px"> </n-layout-footer>
     </n-layout>
   </n-layout>
+  <n-drawer
+    v-model:show="settingDrawerActive"
+    :default-width="400"
+    :max-width="600"
+    :min-width="250"
+    placement="right"
+    resizable
+    to="#index-layout-content"
+    :trap-focus="false"
+    :block-scroll="false">
+    <n-drawer-content title="设置" closable>
+      <n-button> 浅色 </n-button>
+      <n-button color="#000"> 深色 </n-button>
+    </n-drawer-content>
+  </n-drawer>
 </template>
 
 <style scoped></style>
