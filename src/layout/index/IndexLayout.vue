@@ -3,7 +3,7 @@
   import { NIcon, type MenuOption } from 'naive-ui'
   import { h, ref } from 'vue'
 
-  import service from '@/utils/service'
+  import { useSettingStore } from '@/stores/settings'
 
   // 获取所有图标
   const nIcons: Record<string, any> = {}
@@ -42,9 +42,10 @@
       key: 'logout',
     },
   ]
-  const settingDrawerActive = ref(false)
 
-  await service.get('/api/test').catch((e) => console.log(e))
+  const settingDrawerActive = ref(false)
+  const settings = useSettingStore()
+  const curTheme = ref('')
 </script>
 
 <template>
@@ -87,13 +88,27 @@
       :max-width="600"
       :min-width="250"
       placement="right"
+      show-mask="transparent"
       resizable
       to="#index-layout-content"
       :trap-focus="false"
       :block-scroll="false">
       <n-drawer-content title="设置" closable>
-        <n-button> 浅色 </n-button>
-        <n-button color="#000"> 深色 </n-button>
+        <!-- <n-button @click="settings.theme = 'light'"> 浅色 </n-button>
+        <n-button color="#000" @click="settings.theme = 'dark'"> 深色 </n-button> -->
+        <n-radio-group
+          v-model:value="curTheme"
+          :on-update:value="
+            (value: 'light' | 'dark') => {
+              console.log('#####')
+              curTheme = value
+              settings.theme = value
+            }
+          "
+          name="radiogroup">
+          <n-radio-button value="light">亮色</n-radio-button>
+          <n-radio-button value="dark">暗色</n-radio-button>
+        </n-radio-group>
       </n-drawer-content>
     </n-drawer>
   </div>
