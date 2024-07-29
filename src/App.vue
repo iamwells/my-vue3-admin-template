@@ -5,6 +5,7 @@
 
   import { useSettingStore } from './stores/settings'
   import type { Themes } from './stores/settings'
+  import service from './utils/service'
 
   const settings = useSettingStore()
 
@@ -21,20 +22,26 @@
     return curTheme.value.LoadingBar.common?.primaryColor || '#29d'
   })
   console.log(barColor.value)
-
-  // await service.get('/api/test').catch((e) => console.log(e))
 </script>
 
 <template>
   <n-config-provider :theme="curTheme" :locale="zhCN" :date-locale="dateZhCN">
-    <!-- RoterView添加过渡动画和保活机制 -->
-    <router-view #default="{ Component }">
-      <transition name="fade" mode="out-in">
-        <keep-alive>
-          <component :is="Component" />
-        </keep-alive>
-      </transition>
-    </router-view>
+    <!-- RoterView添加过渡动画和保活机制,组件内可能存在await操作-->
+    <suspense>
+      <template #default>
+        <router-view #default="{ Component }">
+          <transition name="fade" mode="out-in">
+            <keep-alive>
+              <component :is="Component" />
+            </keep-alive>
+          </transition>
+        </router-view>
+      </template>
+      <template #fallback>
+        Error
+      </template>
+    </suspense>
+
     <n-global-style />
   </n-config-provider>
 </template>
