@@ -4,6 +4,7 @@
   import { h, ref } from 'vue'
 
   import { useSettingStore } from '@/stores/settings'
+  import service from '@/utils/service'
 
   // 获取所有图标
   const nIcons: Record<string, any> = {}
@@ -46,6 +47,10 @@
   const settingDrawerActive = ref(false)
   const settings = useSettingStore()
   const curTheme = ref('')
+
+  async function test() {
+    await service.post('/api/user/info')
+  }
 </script>
 
 <template>
@@ -63,7 +68,7 @@
       <n-layout>
         <n-layout-header bordered position="absolute" style="height: 64px; top: 0px">
           <n-flex justify="end" align="center" style="height: 100%; padding: 0 12px">
-            <n-button size="large">Oops!</n-button>
+            <n-button size="large" @click="test">Oops!</n-button>
             <n-dropdown :options="profileOptions" trigger="click">
               <n-avatar
                 size="large"

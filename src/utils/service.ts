@@ -1,8 +1,7 @@
 import axios from 'axios'
 
+import { message } from './native-api'
 import progress from './progress'
-
-
 
 const service = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
@@ -30,6 +29,7 @@ service.interceptors.response.use(
   (error) => {
     progress.done()
     console.log('@response error', error)
+    message.error(error.message)
 
     return Promise.reject(error)
   },
