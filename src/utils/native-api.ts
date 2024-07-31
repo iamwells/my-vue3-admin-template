@@ -1,4 +1,4 @@
-import { createDiscreteApi, darkTheme, lightTheme, type ConfigProviderProps, type MessageOptions } from 'naive-ui'
+import { createDiscreteApi, darkTheme, lightTheme, type ConfigProviderProps } from 'naive-ui'
 import { computed, ref } from 'vue'
 
 import { useSettingStore } from '@/stores/settings'
