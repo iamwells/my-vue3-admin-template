@@ -14,7 +14,7 @@ service.interceptors.request.use(
     return config
   },
   (error) => {
-    progress.done()
+    progress.error()
     console.log('@request error', error)
 
     return Promise.reject(error)
@@ -27,7 +27,7 @@ service.interceptors.response.use(
     return response
   },
   (error) => {
-    progress.done()
+    progress.error()
     console.log('@response error', error)
     message.error(error.message)
 

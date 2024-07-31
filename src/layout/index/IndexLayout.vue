@@ -4,6 +4,7 @@
   import { h, ref } from 'vue'
 
   import { useSettingStore } from '@/stores/settings'
+  import { matchTheme } from '@/utils/native-api'
   import service from '@/utils/service'
 
   // 获取所有图标
@@ -108,6 +109,7 @@
               console.log('#####')
               curTheme = value
               settings.theme = value
+              matchTheme()
             }
           "
           name="radiogroup">

@@ -1,6 +1,6 @@
 import nProgress from 'nprogress'
 
-// import { loadingBar } from './native-api'
+import { loadingBar } from './native-api'
 
 import 'nprogress/nprogress.css'
 
@@ -12,12 +12,15 @@ nProgress.configure({
 
 const progress = {
   start() {
-    nProgress.start()
-    // loadingBar.start()
+    // nProgress.start()
+    loadingBar.start()
   },
   done() {
-    nProgress.done()
-    // loadingBar.finish()
+    // nProgress.done()
+    loadingBar.finish()
+  },
+  error() {
+    loadingBar.error()
   },
 }
 
