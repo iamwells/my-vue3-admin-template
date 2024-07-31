@@ -1,4 +1,4 @@
-import { createDiscreteApi, darkTheme, lightTheme, type ConfigProviderProps } from 'naive-ui'
+import { createDiscreteApi, darkTheme, lightTheme, useOsTheme, type ConfigProviderProps } from 'naive-ui'
 import { computed, ref } from 'vue'
 
 import { useSettingStore } from '@/stores/settings'
@@ -26,5 +26,5 @@ export const { message, notification, dialog, loadingBar, modal } = createDiscre
 
 export function matchTheme() {
   const settings = useSettingStore()
-  theme.value = settings.theme
+  theme.value = settings.theme === 'os' ? useOsTheme().value : settings.theme
 }

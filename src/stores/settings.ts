@@ -10,17 +10,17 @@ export interface Themes {
 export const useSettingStore = defineStore(
   'settings',
   () => {
-    const theme: Ref<'light' | 'dark'> = ref('light')
+    const theme: Ref<'light' | 'dark' | 'os'> = ref('os')
 
-    function swtichTheme() {
-      theme.value = theme.value === 'light' ? 'dark' : 'light'
+    function swtichTheme(name: 'light' | 'dark' | 'os') {
+      theme.value = name
     }
 
     return { theme, swtichTheme }
   },
   {
     persist: {
-      storage: sessionStorage,
+      storage: localStorage,
     },
   },
 )

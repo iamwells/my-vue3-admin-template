@@ -1,10 +1,11 @@
 <script setup lang="ts">
-  import { darkTheme, dateZhCN, lightTheme, zhCN, type GlobalThemeOverrides } from 'naive-ui'
-  import { computed, reactive } from 'vue'
+  import { darkTheme, dateZhCN, lightTheme, useOsTheme, zhCN, type GlobalThemeOverrides } from 'naive-ui'
+  import { computed, reactive, watch } from 'vue'
   import { RouterView } from 'vue-router'
 
   import { useSettingStore } from './stores/settings'
   import type { Themes } from './stores/settings'
+  import { matchTheme } from './utils/native-api'
 
   const settings = useSettingStore()
 
@@ -14,8 +15,20 @@
   })
 
   const curTheme = computed(() => {
-    return themes[settings.theme]
+    const theme = settings.theme
+    if (theme === 'os') {
+      return themes[useOsTheme().value || 'light']
+    }
+    return themes[theme]
   })
+
+  watch(
+    curTheme,
+    () => {
+      matchTheme()
+    },
+    { immediate: true },
+  )
 
   const themeOverrides: GlobalThemeOverrides = {
     Menu: {

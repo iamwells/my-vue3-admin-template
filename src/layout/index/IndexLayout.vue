@@ -4,7 +4,6 @@
   import { h, ref } from 'vue'
 
   import { useSettingStore } from '@/stores/settings'
-  import { matchTheme } from '@/utils/native-api'
   import service from '@/utils/service'
 
   // 获取所有图标
@@ -46,8 +45,8 @@
   ]
 
   const settingDrawerActive = ref(false)
-  const settings = useSettingStore()
-  const curTheme = ref('')
+  const { theme, swtichTheme } = useSettingStore()
+  const curTheme = ref(theme)
 
   async function test() {
     await service.post('/api/user/info')
@@ -105,16 +104,16 @@
         <n-radio-group
           v-model:value="curTheme"
           :on-update:value="
-            (value: 'light' | 'dark') => {
+            (value: 'light' | 'dark' | 'os') => {
               console.log('#####')
               curTheme = value
-              settings.theme = value
-              matchTheme()
+              swtichTheme(value)
             }
           "
           name="radiogroup">
           <n-radio-button value="light">亮色</n-radio-button>
           <n-radio-button value="dark">暗色</n-radio-button>
+          <n-radio-button value="os">随系统</n-radio-button>
         </n-radio-group>
       </n-drawer-content>
     </n-drawer>
